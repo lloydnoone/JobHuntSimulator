@@ -67,7 +67,6 @@ function index(req, res) {
 //job create /users/jobs
 function jobCreate(req, res, next) {
   req.body.user = req.currentUser
-  console.log('currentUser: ', req.body.user)
   User
     .findById(req.body.user._id)
     .then(user => {

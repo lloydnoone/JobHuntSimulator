@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-import LocalAuth from '../lib/localAuth'
+import localAuth from '../lib/localAuth'
 
 import Listing from './Listing'
 
@@ -17,30 +17,31 @@ class Listings extends React.Component {
   }
 
   componentDidMount() {
-    const jobIds = JSON.parse(localStorage.getItem('jobIds')) || []
-    this.setState({ jobIds: [...jobIds] })
+    if (localAuth.isAuthenticated()) {
+      axios.get('api/profile', { headers: { Authorization: `Bearer ${localAuth.getToken()}` } })
+        .then((res) => {
+          const jobIdsArr = res.data.jobs.map(job => {
+            return job.jobBoardId
+          })
+          this.setState({ jobIds: jobIdsArr })
+        })
+        .catch(err => console.log('error: ', err))
+    }
+    
   }
 
   saveId(e, jobId) {
     e.preventDefault()
-    axios.post('/api/login', { email: 'lloyd@email.com', password: 'pass'
+    axios.post('/api/users/jobs', { jobBoardId: jobId }, { //attaches job to currently logged in user
+      headers: { Authorization: `Bearer ${localAuth.getToken()}` }
     })
-      .then(res => {
-        LocalAuth.setToken(res.data.token)
-        axios.post('/api/users/jobs', { jobBoardId: jobId }, {
-          headers: { Authorization: `Bearer ${LocalAuth.getToken()}` }
+      .then((res) => {
+        const jobIdsArr = res.data.jobs.map(job => {
+          return job.jobBoardId
         })
-          .then((res) => { 
-            console.log('response from savejob: ', res)
-            //const commentsArr = [...res.data.comments]
-            //this.setState({ comments: commentsArr })
-          })
-          .catch(err => console.log('error: ', err))
+        this.setState({ jobIds: jobIdsArr })
       })
-      .catch(err => console.log(err.message))
-    const jobIds = JSON.parse(localStorage.getItem('jobIds')) || []
-    this.setState({ jobIds: [...jobIds, jobId] })
-    localStorage.setItem('jobIds', JSON.stringify([...jobIds, jobId]))
+      .catch(err => console.log('error: ', err))
   }
 
   render() {
@@ -68,5 +69,3 @@ class Listings extends React.Component {
 }
 
 export default Listings
-
-//`.details ${this.state.detailsDisplay ? '.detailsOpen' : ''}`
