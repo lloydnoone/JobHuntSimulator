@@ -22,11 +22,6 @@ class Listing extends React.Component {
     return ele.textContent
   }
 
-  // saveId(jobId) {
-  //   const jobs = JSON.parse(localStorage.getItem('jobIds')) || []
-  //   localStorage.setItem('jobIds', JSON.stringify([...jobs, jobId]))
-  // }
-
   render() {
     console.log('applied: ', this.props.applied)
     const { job } = this.props
@@ -43,7 +38,7 @@ class Listing extends React.Component {
           <p>{this.HTMLtoText(job.description)}</p>
           {!this.props.applied && 
           <a href={job.url}>
-            <button onClick={() => this.props.saveId(job.id)} className='button'>Apply</button>
+            <button onClick={(e) => this.props.saveId(e, job.id)} className='button'>Apply</button>
           </a>}
         </div>
       </div>

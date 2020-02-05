@@ -1,4 +1,5 @@
 const axios = require('axios')
+const User = require('../models/User')
 
 function index(req, res) {
   axios.all([
@@ -58,6 +59,22 @@ function index(req, res) {
     .catch(err => res.status(400).json(err))
 }
 
+//job create /users/jobs
+function jobCreate(req, res, next) {
+  req.body.user = req.currentUser
+  console.log('currentUser: ', req.body.user)
+  User
+    .findById(req.body.user._id)
+    .then(user => {
+      if (!user) return res.status(404).json({ message: 'User not found' })
+      user.jobs.push(req.body) // this might cause 422, check user Schema
+      return user.save()
+    })
+    .then(user => res.status(201).json(user))
+    .catch(next)
+}
+
 module.exports = {
-  index
+  index,
+  jobCreate
 }

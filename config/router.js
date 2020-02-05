@@ -1,29 +1,24 @@
 const router = require('express').Router()
 const jobs = require('../controllers/jobs')
+const users = require('../controllers/auth')
+const secureRoute = require('../lib/secureRoute')
 
 router.route('/jobs/:title/:location')
   .get(jobs.index)
-  //.post(secureRoute, cigars.create)
 
-// router.route('/cigars/:id')
-//   .get(cigars.show)
-//   .delete(secureRoute, cigars.destroy)
-//   .put(secureRoute, cigars.update)
+router.route('/register')
+  .post(users.register)
 
-// router.route('/cigars/:id/comments')
-//   .get(cigars.commentShow)
-//   .post(secureRoute, cigars.commentCreate)
+router.route('/register')
+  .post(users.register)
 
-// router.route('/cigars/:id/comments/:commentId')
-//   .delete(secureRoute, cigars.commentDelete)
+router.route('/login')
+  .post(users.login)
 
-// router.route('/register')
-//   .post(users.register)
+router.route('/profile')
+  .get(secureRoute, users.profile)
 
-// router.route('/login')
-//   .post(users.login)
-
-// router.route('/profile')
-//   .get(secureRoute, users.profile)
+router.route('/users/jobs')
+  .post(secureRoute, jobs.jobCreate)
 
 module.exports = router
