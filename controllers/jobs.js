@@ -14,6 +14,7 @@ function index(req, res) {
     })
   ])
     .then(axios.spread((adzunaRes, githubRes, reedRes) => {
+      console.log('mapping adzuna')
       const adzunaData = adzunaRes.data.results.map(job => {
         return ({
           id: job.id,
@@ -26,7 +27,7 @@ function index(req, res) {
           url: job.redirect_url 
         })
       })
-
+      console.log('mapping github')
       const githubData = githubRes.data.map(job => {
         return ({
           id: job.id,
@@ -39,7 +40,7 @@ function index(req, res) {
           url: job.company_url
         })
       })
-
+      console.log('mapping reed')
       const reedData = reedRes.data.results.map(job => {
         return ({
           id: job.jobId,
@@ -54,9 +55,13 @@ function index(req, res) {
       })
       const jobsArray = [ ...adzunaData, ...githubData, ...reedData ]
       const jobsData = { jobsArray }
+      console.log('sending jobs data')
       res.status(200).send(jobsData)
     }))
-    .catch(err => res.status(400).json(err))
+    .catch(err => {
+      console.log(err.message)
+      res.status(400).json(err)
+    })
 }
 
 //job create /users/jobs

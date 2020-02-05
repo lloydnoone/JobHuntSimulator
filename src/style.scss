@@ -41,6 +41,8 @@ a {
 .searchBar {
   background: $lightBlue;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
   .dropdown {
     position: relative;
     display: inline-block;
@@ -82,6 +84,47 @@ a {
     width: 100px;
     margin: 10px 5px 0px 0px;
     outline: none;
+  }
+  .dropdownInput {
+    width: 120px;
+    margin: 5px 16px;
+    outline: none;
+  }
+  .loginForm {
+    position: relative;
+    display: inline-block;
+    .loginFormContent {
+      display: none;
+      position: absolute;
+      background-color: $offwhite;
+      min-width: 160px;
+      box-shadow: $shadow;
+      z-index: 1;
+      form {
+        padding-top: 5px;
+      }
+    }
+  }
+  .loginForm:hover .loginFormContent {
+    display: block;
+  }
+  .registerForm {
+    position: relative;
+    display: inline-block;
+    .registerFormContent {
+      display: none;
+      position: absolute;
+      background-color: $offwhite;
+      min-width: 160px;
+      box-shadow: $shadow;
+      z-index: 1;
+      form {
+        padding-top: 5px;
+      }
+    }
+  }
+  .registerForm:hover .registerFormContent {
+    display: block;
   }
 }
 

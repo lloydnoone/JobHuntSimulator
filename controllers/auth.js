@@ -22,7 +22,7 @@ function login(req, res) {
       }
       // if its ok create a token baking in user id, secret to encode and expiry time
       const token = jwt.sign( { sub: user._id }, secret, { expiresIn: '6h' } )
-      res.status(202).json({ message: `Welcome Back ${user.username}`, token })
+      res.status(202).json({ userId: user._id, message: `Welcome Back ${user.username}`, token })
     })
     .catch(() => res.status(401).json( { message: 'Unauthorized' } ))
 }
