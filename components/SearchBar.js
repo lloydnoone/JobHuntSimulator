@@ -32,6 +32,7 @@ class SearchBar extends React.Component {
     axios.post('/api/login', this.state)
       .then(res => {
         localAuth.setToken(res.data.token)
+        this.props.loadUsersJobs()
         this.setState({ email: '', password: '', userId: res.data.userId })
         console.log('data from response. ', res.data)
       })
@@ -41,6 +42,7 @@ class SearchBar extends React.Component {
   handleLogOut(e) {
     e.preventDefault()
     localAuth.logout()
+    this.props.clearUsersJobs()
     this.setState({ userId: '' })
   }
 

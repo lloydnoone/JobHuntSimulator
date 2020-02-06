@@ -1,4 +1,5 @@
 import React from 'react'
+import localAuth from '../lib/localAuth'
 
 class Listing extends React.Component {
   constructor(props) {
@@ -36,10 +37,13 @@ class Listing extends React.Component {
           <p>Salary: {job.minSalary} - {job.maxSalary}</p>
           <h3>Description: </h3>
           <p>{this.HTMLtoText(job.description)}</p>
-          {!this.props.applied && 
+          {!this.props.applied && localAuth.isAuthenticated() &&
           <a href={job.url}>
             <button onClick={(e) => this.props.saveId(e, job.id)} className='button'>Apply</button>
           </a>}
+          {!this.props.applied && !localAuth.isAuthenticated() &&
+            <button className='button'>Sign in to apply!</button>
+          }
         </div>
       </div>
     )

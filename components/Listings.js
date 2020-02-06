@@ -1,7 +1,4 @@
 import React from 'react'
-import axios from 'axios'
-
-import localAuth from '../lib/localAuth'
 
 import Listing from './Listing'
 
@@ -10,41 +7,12 @@ class Listings extends React.Component {
     super(props)
 
     this.state = {
-      detailsDisplay: true,
-      jobIds: []
+      detailsDisplay: true
     }
-    this.saveId = this.saveId.bind(this)
-  }
-
-  componentDidMount() {
-    if (localAuth.isAuthenticated()) {
-      axios.get('api/profile', { headers: { Authorization: `Bearer ${localAuth.getToken()}` } })
-        .then((res) => {
-          const jobIdsArr = res.data.jobs.map(job => {
-            return job.jobBoardId
-          })
-          this.setState({ jobIds: jobIdsArr })
-        })
-        .catch(err => console.log('error: ', err))
-    }
-    
-  }
-
-  saveId(e, jobId) {
-    e.preventDefault()
-    axios.post('/api/users/jobs', { jobBoardId: jobId }, { //attaches job to currently logged in user
-      headers: { Authorization: `Bearer ${localAuth.getToken()}` }
-    })
-      .then((res) => {
-        const jobIdsArr = res.data.jobs.map(job => {
-          return job.jobBoardId
-        })
-        this.setState({ jobIds: jobIdsArr })
-      })
-      .catch(err => console.log('error: ', err))
   }
 
   render() {
+    console.log('listings render. ')
     return (
       <div className="listings">
         {this.props.jobs.jobsArray
@@ -58,7 +26,7 @@ class Listings extends React.Component {
             return <Listing 
               key={job.id} 
               job={job} 
-              applied={this.state.jobIds.includes(job.id)}
+              applied={this.props.jobIds.includes(job.id)}
               saveId={this.saveId}
             />
           })
